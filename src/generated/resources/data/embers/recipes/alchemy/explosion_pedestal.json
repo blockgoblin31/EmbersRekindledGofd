@@ -19,6 +19,7 @@
   "output": {
     "item": "embers:explosion_pedestal"
   },
+  "reagents": [],
   "tablet": {
     "item": "embers:alchemy_pedestal"
   }

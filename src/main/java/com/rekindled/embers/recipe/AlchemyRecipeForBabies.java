@@ -2,6 +2,7 @@ package com.rekindled.embers.recipe;
 
 import java.util.ArrayList;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonArray;
@@ -21,15 +22,15 @@ public class AlchemyRecipeForBabies extends AlchemyRecipeBase {
 
 	public static final Serializer SERIALIZER = new Serializer();
 
-	public AlchemyRecipeForBabies(ResourceLocation id, Ingredient tablet, ArrayList<Ingredient> aspects, ArrayList<Ingredient> inputs, ItemStack output, ItemStack failure) {
-		super(id, tablet, aspects, inputs, output, failure);
+	public AlchemyRecipeForBabies(ResourceLocation id, Ingredient tablet, ArrayList<Ingredient> aspects, ArrayList<ReagentInfo> reagents, ArrayList<Ingredient> inputs, ItemStack output, ItemStack failure) {
+		super(id, tablet, aspects, reagents, inputs, output, failure);
 	}
 
 	public Long cachedSeed = null;
-	public ArrayList<Ingredient> code = null;
+	public AlchemyCode code = null;
 
 	@Override
-	public ArrayList<Ingredient> getCode(long seed) {
+	public AlchemyCode getCode(long seed) {
 		if (cachedSeed == null || cachedSeed != seed) {
 			int incr = 0;
 			boolean incorrectCode = true;
@@ -38,7 +39,7 @@ public class AlchemyRecipeForBabies extends AlchemyRecipeBase {
 				incorrectCode = false;
 				for (Ingredient ingredient : aspects) {
 					//only return this recipe if it contains all possible aspecti
-					if (!code.contains(ingredient)) {
+					if (!code.aspects.contains(ingredient)) {
 						incorrectCode = true;
 						break;
 					}
@@ -75,6 +76,13 @@ public class AlchemyRecipeForBabies extends AlchemyRecipeBase {
 					aspects.add(Ingredient.fromJson(element));
 				}
 			}
+			ArrayList<ReagentInfo> reagents = new ArrayList<>();
+			JsonArray reagentJson = GsonHelper.getAsJsonArray(json, "reagents", null);
+			if (reagentJson != null) {
+				for (JsonElement element : reagentJson) {
+					reagents.add(ReagentInfo.fromJson(element));
+				}
+			}
 			ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
 			ItemStack failure;
 			if (json.has("failure")) {
@@ -82,24 +90,30 @@ public class AlchemyRecipeForBabies extends AlchemyRecipeBase {
 			} else {
 				failure = new ItemStack(RegistryManager.ALCHEMICAL_WASTE.get());
 			}
-			return new AlchemyRecipeForBabies(recipeId, tablet, aspects, inputs, output, failure);
+			return new AlchemyRecipeForBabies(recipeId, tablet, aspects, reagents, inputs, output, failure);
 		}
 
 		@Override
 		public @Nullable AlchemyRecipeForBabies fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			Ingredient tablet = Ingredient.fromNetwork(buffer);
 			ArrayList<Ingredient> aspects = buffer.readCollection((i) -> new ArrayList<>(), (buf) -> Ingredient.fromNetwork(buf));
+			ArrayList<ReagentInfo> reagents = buffer.readCollection((i) -> new ArrayList<>(), (buf) -> new ReagentInfo(BuiltInRegistries.ITEM.get(buf.readResourceLocation()), buf.readInt(), buf.readInt()));
 			ArrayList<Ingredient> inputs = buffer.readCollection((i) -> new ArrayList<>(), (buf) -> Ingredient.fromNetwork(buf));
 			ItemStack output = buffer.readItem();
 			ItemStack failure = buffer.readItem();
 
-			return new AlchemyRecipeForBabies(recipeId, tablet, aspects, inputs, output, failure);
+			return new AlchemyRecipeForBabies(recipeId, tablet, aspects, reagents, inputs, output, failure);
 		}
 
 		@Override
 		public void toNetwork(FriendlyByteBuf buffer, AlchemyRecipeForBabies recipe) {
 			recipe.tablet.toNetwork(buffer);
 			buffer.writeCollection(recipe.aspects, (buf, input) -> input.toNetwork(buf));
+			buffer.writeCollection(recipe.reagents, (buf, input) -> {
+				buf.writeInt(input.max());
+				buf.writeInt(input.min());
+				buf.writeResourceLocation(BuiltInRegistries.ITEM.getKey(input.reagent()));
+			});
 			buffer.writeCollection(recipe.inputs, (buf, input) -> input.toNetwork(buf));
 			buffer.writeItemStack(recipe.output, false);
 			buffer.writeItemStack(recipe.failure, false);

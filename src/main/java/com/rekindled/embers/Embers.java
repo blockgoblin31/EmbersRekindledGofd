@@ -151,6 +151,7 @@ public class Embers {
 
 	public static final String MODID_OLD = "embersrekindled";
 	public static final String MODID = "embers";
+	public static final String TWEAKS_MODID = "embers_gofd";
 
 	public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -182,6 +183,9 @@ public class Embers {
 		RegistryManager.STRUCTURE_TYPES.register(modEventBus);
 		RegistryManager.STRUCTURE_PROCESSOR_TYPES.register(modEventBus);
 		EmbersSounds.init();
+
+		RegistryManager.NEW_BLOCKS.register(modEventBus);
+		RegistryManager.NEW_BLOCK_ENTITY_TYPES.register(modEventBus);
 
 		ConfigManager.register();
 

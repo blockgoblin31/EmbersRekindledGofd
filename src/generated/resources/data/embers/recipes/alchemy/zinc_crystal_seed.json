@@ -43,6 +43,7 @@
   "output": {
     "item": "embers:zinc_crystal_seed"
   },
+  "reagents": [],
   "tablet": {
     "tag": "embers:crystal_seeds"
   }

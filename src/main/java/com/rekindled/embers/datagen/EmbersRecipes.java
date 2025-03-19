@@ -11,26 +11,7 @@ import com.rekindled.embers.RegistryManager;
 import com.rekindled.embers.RegistryManager.StoneDecoBlocks;
 import com.rekindled.embers.RegistryManager.ToolSet;
 import com.rekindled.embers.compat.curios.CuriosCompat;
-import com.rekindled.embers.recipe.AlchemyRecipeBuilder;
-import com.rekindled.embers.recipe.AnvilAugmentRecipeBuilder;
-import com.rekindled.embers.recipe.AnvilAugmentRemoveRecipe;
-import com.rekindled.embers.recipe.AnvilBreakdownRecipe;
-import com.rekindled.embers.recipe.AnvilRepairMateriaRecipe;
-import com.rekindled.embers.recipe.AnvilRepairRecipe;
-import com.rekindled.embers.recipe.AugmentIngredient;
-import com.rekindled.embers.recipe.BoilingRecipeBuilder;
-import com.rekindled.embers.recipe.BoringRecipeBuilder;
-import com.rekindled.embers.recipe.CatalysisCombustionRecipeBuilder;
-import com.rekindled.embers.recipe.EmberActivationRecipeBuilder;
-import com.rekindled.embers.recipe.GaseousFuelRecipeBuilder;
-import com.rekindled.embers.recipe.GemSocketRecipeBuilder;
-import com.rekindled.embers.recipe.GemUnsocketRecipe;
-import com.rekindled.embers.recipe.GenericRecipeBuilder;
-import com.rekindled.embers.recipe.HeatIngredient;
-import com.rekindled.embers.recipe.MeltingRecipeBuilder;
-import com.rekindled.embers.recipe.MetalCoefficientRecipeBuilder;
-import com.rekindled.embers.recipe.MixingRecipeBuilder;
-import com.rekindled.embers.recipe.StampingRecipeBuilder;
+import com.rekindled.embers.recipe.*;
 import com.rekindled.embers.util.ConsumerWrapperBuilder;
 import com.rekindled.embers.util.FluidAmounts;
 import com.rekindled.embers.util.MeltingBonus;
@@ -193,6 +174,10 @@ public class EmbersRecipes extends RecipeProvider implements IConditionBuilder {
 		MetalCoefficientRecipeBuilder.create(Tags.Blocks.STORAGE_BLOCKS_GOLD).domain(Embers.MODID).folder(coefficientFolder).coefficient(3.0).save(consumer);
 
 		//alchemy
+		AlchemyRecipeBuilder.create(new ItemStack(Items.DIAMOND)).tablet(Items.COAL).domain(Embers.TWEAKS_MODID).folder(alchemyFolder)
+		.inputs(RegistryManager.EMBER_SHARD.get(), RegistryManager.EMBER_SHARD.get(), RegistryManager.EMBER_SHARD.get(), RegistryManager.EMBER_SHARD.get())
+		.aspects(EmbersItemTags.DAWNSTONE_ASPECTUS, EmbersItemTags.IRON_ASPECTUS)
+		.reagents(new IAlchemyRecipe.ReagentInfo(RegistryManager.ASH.get(), 4, 8)).save(consumer);
 		AlchemyRecipeBuilder.create(new ItemStack(Items.NETHERRACK, 4)).tablet(RegistryManager.EMBER_GRIT.get()).domain(Embers.MODID).folder(alchemyFolder)
 		.inputs(Items.COBBLESTONE, Items.COBBLESTONE, Items.COBBLESTONE, Items.COBBLESTONE)
 		.aspects(EmbersItemTags.COPPER_ASPECTUS, EmbersItemTags.IRON_ASPECTUS).save(consumer);

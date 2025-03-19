@@ -24,6 +24,7 @@ public class AlchemyRecipeBuilder {
 	public ItemStack failure = ItemStack.EMPTY;
 	public Ingredient tablet;
 	public ArrayList<Ingredient> aspects = new ArrayList<Ingredient>();
+	public ArrayList<IAlchemyRecipe.ReagentInfo> reagents = new ArrayList<>();
 	public ArrayList<Ingredient> inputs = new ArrayList<Ingredient>();
 	public boolean babbyGames = false;
 
@@ -122,6 +123,17 @@ public class AlchemyRecipeBuilder {
 		return this;
 	}
 
+	public AlchemyRecipeBuilder reagents(ArrayList<IAlchemyRecipe.ReagentInfo> reagents) {
+		this.reagents.addAll(reagents);
+		return this;
+	}
+
+	public AlchemyRecipeBuilder reagents(IAlchemyRecipe.ReagentInfo... reagents) {
+		for (IAlchemyRecipe.ReagentInfo reagent : reagents)
+			this.reagents.add(reagent);
+		return this;
+	}
+
 	@SafeVarargs
 	public final AlchemyRecipeBuilder aspects(TagKey<Item>... aspects) {
 		for (TagKey<Item> aspect : aspects)
@@ -143,8 +155,8 @@ public class AlchemyRecipeBuilder {
 
 	public AlchemyRecipeBase build() {
 		if (babbyGames)
-			return new AlchemyRecipeForBabies(id, tablet, aspects, inputs, output, failure);
-		return new AlchemyRecipe(id, tablet, aspects, inputs, output, failure);
+			return new AlchemyRecipeForBabies(id, tablet, aspects, reagents, inputs, output, failure);
+		return new AlchemyRecipe(id, tablet, aspects, reagents, inputs, output, failure);
 	}
 
 	public void save(Consumer<FinishedRecipe> consumer) {
@@ -185,6 +197,12 @@ public class AlchemyRecipeBuilder {
 				aspectJson.add(aspect.toJson());
 			}
 			json.add("aspects", aspectJson);
+
+			JsonArray reagentJson = new JsonArray();
+			for (IAlchemyRecipe.ReagentInfo info : recipe.reagents) {
+				reagentJson.add(info.toJson());
+			}
+			json.add("reagents", reagentJson);
 
 			JsonArray inputJson = new JsonArray();
 			for (Ingredient input : recipe.inputs) {

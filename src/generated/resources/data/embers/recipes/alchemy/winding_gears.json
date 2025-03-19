@@ -25,6 +25,7 @@
   "output": {
     "item": "embers:winding_gears"
   },
+  "reagents": [],
   "tablet": {
     "tag": "forge:ingots/dawnstone"
   }

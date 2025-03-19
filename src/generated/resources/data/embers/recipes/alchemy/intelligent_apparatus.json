@@ -28,6 +28,7 @@
   "output": {
     "item": "embers:intelligent_apparatus"
   },
+  "reagents": [],
   "tablet": {
     "tag": "forge:plates/copper"
   }

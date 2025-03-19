@@ -12,11 +12,13 @@ public class AlchemyContext implements Container {
 
 	public ItemStack tablet;
 	public List<PedestalContents> contents;
+	public List<ItemStack> reagents;
 	public long seed;
 
-	public AlchemyContext(ItemStack tablet, List<PedestalContents> contents, long seed) {
+	public AlchemyContext(ItemStack tablet, List<PedestalContents> contents, List<ItemStack> reagents, long seed) {
 		this.tablet = tablet;
 		this.contents = contents;
+		this.reagents = reagents;
 		this.seed = seed;
 	}
 

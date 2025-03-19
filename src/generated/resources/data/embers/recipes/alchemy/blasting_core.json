@@ -25,6 +25,7 @@
   "output": {
     "item": "embers:blasting_core"
   },
+  "reagents": [],
   "tablet": {
     "tag": "forge:gunpowder"
   }

@@ -28,6 +28,7 @@
   "output": {
     "item": "embers:flame_barrier"
   },
+  "reagents": [],
   "tablet": {
     "item": "embers:ember_crystal"
   }

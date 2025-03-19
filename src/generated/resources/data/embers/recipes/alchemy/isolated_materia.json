@@ -29,6 +29,7 @@
     "count": 4,
     "item": "embers:isolated_materia"
   },
+  "reagents": [],
   "tablet": {
     "tag": "forge:ingots/iron"
   }

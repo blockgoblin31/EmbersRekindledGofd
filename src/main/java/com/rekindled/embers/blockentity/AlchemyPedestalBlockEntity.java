@@ -107,4 +107,6 @@ public class AlchemyPedestalBlockEntity extends BlockEntity implements IExtraCap
 	public void addCapabilityDescription(List<Component> strings, Capability<?> capability, Direction facing) {
 		strings.add(IExtraCapabilityInformation.formatCapability(EnumIOType.BOTH, Embers.MODID + ".tooltip.goggles.item", Component.translatable(Embers.MODID + ".tooltip.goggles.item.aspectus")));
 	}
+
+	public void setActive(int active) {}
 }

@@ -1,12 +1,20 @@
 package com.rekindled.embers.recipe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.rekindled.embers.RegistryManager;
 import com.rekindled.embers.api.misc.AlchemyResult;
 
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -15,7 +23,7 @@ import net.minecraft.world.level.Level;
 
 public interface IAlchemyRecipe extends Recipe<AlchemyContext> {
 
-	public ArrayList<Ingredient> getCode(long seed);
+	public AlchemyCode getCode(long seed);
 
 	public boolean matchesCorrect(AlchemyContext context, Level pLevel);
 
@@ -52,13 +60,36 @@ public interface IAlchemyRecipe extends Recipe<AlchemyContext> {
 		return true;
 	}
 
-	public static class PedestalContents {
-		public ItemStack aspect;
-		public ItemStack input;
+	record PedestalContents(ItemStack aspect, ItemStack input) {}
 
-		public PedestalContents(ItemStack aspect, ItemStack input) {
-			this.aspect = aspect;
-			this.input = input;
+	class AlchemyCode {
+		public ArrayList<Ingredient> aspects = new ArrayList<>();
+		public HashMap<Item, Integer> reagentAmounts = new HashMap<>();
+
+		public AlchemyCode(ArrayList<Ingredient> aspectTypes, ArrayList<ReagentInfo> reagentInfo, int inputs, long seed) {
+			Random rand = new Random(seed);
+			for (int i = 0; i < inputs; i++) {
+				aspects.add(aspectTypes.get(rand.nextInt(aspectTypes.size())));
+			}
+			for (ReagentInfo info : reagentInfo) {
+				reagentAmounts.put(info.reagent, rand.nextInt(info.min, info.max));
+			}
+		}
+	}
+
+	record ReagentInfo(Item reagent, int min, int max) {
+		public static ReagentInfo fromJson(JsonElement json) {
+			if (!json.isJsonObject()) return null;
+			JsonObject obj = json.getAsJsonObject();
+			return new ReagentInfo(BuiltInRegistries.ITEM.get((new ResourceLocation(obj.get("item").getAsString()))), obj.get("min").getAsInt(), obj.get("max").getAsInt());
+		}
+
+		public JsonObject toJson() {
+			JsonObject output = new JsonObject();
+			output.add("item", new JsonPrimitive(BuiltInRegistries.ITEM.getKey(reagent).toString()));
+			output.add("min", new JsonPrimitive(min));
+			output.add("max", new JsonPrimitive(max));
+			return output;
 		}
 	}
 }

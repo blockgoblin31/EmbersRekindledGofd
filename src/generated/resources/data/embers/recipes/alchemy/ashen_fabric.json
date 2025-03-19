@@ -28,6 +28,7 @@
   "output": {
     "item": "embers:ashen_fabric"
   },
+  "reagents": [],
   "tablet": {
     "tag": "minecraft:wool"
   }

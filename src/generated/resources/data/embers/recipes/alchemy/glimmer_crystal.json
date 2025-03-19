@@ -25,6 +25,7 @@
   "output": {
     "item": "embers:glimmer_crystal"
   },
+  "reagents": [],
   "tablet": {
     "tag": "forge:gems/quartz"
   }

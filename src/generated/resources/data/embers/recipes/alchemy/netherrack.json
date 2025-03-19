@@ -26,6 +26,7 @@
     "count": 4,
     "item": "minecraft:netherrack"
   },
+  "reagents": [],
   "tablet": {
     "item": "embers:ember_grit"
   }

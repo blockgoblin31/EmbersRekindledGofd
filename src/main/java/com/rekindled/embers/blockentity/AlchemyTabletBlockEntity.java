@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import com.rekindled.embers.ConfigManager;
+import com.rekindled.embers.block.AlchemyReagentPedestalBlock;
 import org.jetbrains.annotations.NotNull;
 
 import com.rekindled.embers.Embers;
@@ -61,7 +63,7 @@ public class AlchemyTabletBlockEntity extends BlockEntity implements ISparkable,
 			Direction.DOWN
 	};
 	public static final int CONSUME_AMOUNT = 2;
-	public static final int SPARK_THRESHOLD = 1000;
+	public static final int SPARK_THRESHOLD = ConfigManager.MINIMUM_BEAM_CHARGE.get();
 	public static final int PROCESSING_TIME = 40;
 
 	public TabletItemStackHandler inventory = new TabletItemStackHandler(1, this);
@@ -153,9 +155,10 @@ public class AlchemyTabletBlockEntity extends BlockEntity implements ISparkable,
 				blockEntity.process++;
 			}
 
-			List<AlchemyPedestalTopBlockEntity> pedestals = getNearbyPedestals(level, pos);
+            List<AlchemyPedestalBlockEntity> pedestals = new ArrayList<>(getNearbyPedestals(level, pos));
+			pedestals.addAll(getNearbyReagentPedestals(level, pos));
 
-			for (AlchemyPedestalTopBlockEntity pedestal : pedestals) {
+			for (AlchemyPedestalBlockEntity pedestal : pedestals) {
 				pedestal.setActive(3);
 
 				level.addParticle(StarParticleOptions.EMBER, pedestal.getBlockPos().getX() + 0.5f, pedestal.getBlockPos().getY() + 0.75f, pedestal.getBlockPos().getZ() + 0.5f, 0, 0.00001, 0);
@@ -168,8 +171,8 @@ public class AlchemyTabletBlockEntity extends BlockEntity implements ISparkable,
 				}
 			}
 
-			if (level.getGameTime() % 10 == 0 && pedestals.size() > 0) {
-				AlchemyPedestalTopBlockEntity pedestal = pedestals.get(rand.nextInt(pedestals.size()));
+			if (level.getGameTime() % 10 == 0 && !pedestals.isEmpty()) {
+				AlchemyPedestalBlockEntity pedestal = pedestals.get(rand.nextInt(pedestals.size()));
 				float dx = (pos.getX() + 0.5f) - (pedestal.getBlockPos().getX() + 0.5f);
 				float dy = (pos.getY() + 0.875f) - (pedestal.getBlockPos().getY() + 0.75f);
 				float dz = (pos.getZ() + 0.5f) - (pedestal.getBlockPos().getZ() + 0.5f);
@@ -192,12 +195,14 @@ public class AlchemyTabletBlockEntity extends BlockEntity implements ISparkable,
 			UpgradeUtil.doWork(blockEntity, blockEntity.upgrades);
 			if (level.getGameTime() % 10 == 0) {
 				List<AlchemyPedestalTopBlockEntity> pedestals = getNearbyPedestals(level, pos);
+				List<AlchemyReagentPedestalBlockEntity> reagentPedestals = getNearbyReagentPedestals(level, pos);
 				if (blockEntity.progress < UpgradeUtil.getWorkTime(blockEntity, PROCESSING_TIME, blockEntity.upgrades)) {
 					blockEntity.progress++;
 					blockEntity.setChanged();
 				} else {
 					List<PedestalContents> contents = getPedestalContents(pedestals);
-					AlchemyContext context = new AlchemyContext(blockEntity.inventory.getStackInSlot(0), contents, ((ServerLevel) level).getSeed());
+					List<ItemStack> reagents = getReagentPedestalContents(reagentPedestals);
+					AlchemyContext context = new AlchemyContext(blockEntity.inventory.getStackInSlot(0), contents, reagents, ((ServerLevel) level).getSeed());
 					blockEntity.cachedRecipe = Misc.getRecipe(blockEntity.cachedRecipe, RegistryManager.ALCHEMY.get(), context, level);
 					if (blockEntity.cachedRecipe != null) {
 						AlchemyResult result = blockEntity.cachedRecipe.getResult(context);
@@ -278,7 +283,8 @@ public class AlchemyTabletBlockEntity extends BlockEntity implements ISparkable,
 			return;
 
 		List<PedestalContents> pedestals = getPedestalContents(getNearbyPedestals(level, worldPosition));
-		AlchemyContext context = new AlchemyContext(inventory.getStackInSlot(0), pedestals, ((ServerLevel) level).getSeed());
+		List<ItemStack> reagents = getReagentPedestalContents(getNearbyReagentPedestals(level, worldPosition));
+		AlchemyContext context = new AlchemyContext(inventory.getStackInSlot(0), pedestals, reagents, ((ServerLevel) level).getSeed());
 		cachedRecipe = Misc.getRecipe(cachedRecipe, RegistryManager.ALCHEMY.get(), context, level);
 
 		AlchemyStartEvent event = new AlchemyStartEvent(this, context, cachedRecipe);
@@ -301,6 +307,14 @@ public class AlchemyTabletBlockEntity extends BlockEntity implements ISparkable,
 		return contents;
 	}
 
+	public static ArrayList<ItemStack> getReagentPedestalContents(List<AlchemyReagentPedestalBlockEntity> pedestals) {
+		ArrayList<ItemStack> contents = new ArrayList<>();
+		for (AlchemyReagentPedestalBlockEntity pedestal : pedestals) {
+			contents.add(pedestal.getContents());
+		}
+		return contents;
+	}
+
 	public static ArrayList<AlchemyPedestalTopBlockEntity> getNearbyPedestals(Level world, BlockPos pos) {
 		ArrayList<AlchemyPedestalTopBlockEntity> pedestals = new ArrayList<>();
 		BlockPos.MutableBlockPos pedestalPos = pos.mutable();
@@ -311,6 +325,23 @@ public class AlchemyTabletBlockEntity extends BlockEntity implements ISparkable,
 				if (tile instanceof AlchemyPedestalTopBlockEntity) {
 					if (((AlchemyPedestalTopBlockEntity) tile).isValid())
 						pedestals.add(((AlchemyPedestalTopBlockEntity) tile));
+				}
+
+			}
+		}
+		return pedestals;
+	}
+
+	public static ArrayList<AlchemyReagentPedestalBlockEntity> getNearbyReagentPedestals(Level world, BlockPos pos) {
+		ArrayList<AlchemyReagentPedestalBlockEntity> pedestals = new ArrayList<>();
+		BlockPos.MutableBlockPos pedestalPos = pos.mutable();
+		for (int i = -3; i < 4; i ++) {
+			for (int j = -3; j < 4; j ++) {
+				pedestalPos.set(pos.getX()+i,pos.getY(),pos.getZ()+j);
+				BlockEntity tile = world.getBlockEntity(pedestalPos);
+				if (tile instanceof AlchemyReagentPedestalBlockEntity) {
+					if (((AlchemyReagentPedestalBlockEntity) tile).isValid())
+						pedestals.add(((AlchemyReagentPedestalBlockEntity) tile));
 				}
 
 			}

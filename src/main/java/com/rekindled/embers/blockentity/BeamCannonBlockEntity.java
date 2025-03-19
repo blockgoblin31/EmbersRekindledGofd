@@ -3,6 +3,7 @@ package com.rekindled.embers.blockentity;
 import java.util.List;
 import java.util.Random;
 
+import com.rekindled.embers.ConfigManager;
 import com.rekindled.embers.RegistryManager;
 import com.rekindled.embers.api.capabilities.EmbersCapabilities;
 import com.rekindled.embers.api.event.EmberEvent;
@@ -65,7 +66,7 @@ public class BeamCannonBlockEntity extends BlockEntity implements IUpgradeable {
 
 	public BeamCannonBlockEntity(BlockPos pPos, BlockState pBlockState) {
 		super(RegistryManager.BEAM_CANNON_ENTITY.get(), pPos, pBlockState);
-		capability.setEmberCapacity(2000);
+		capability.setEmberCapacity(ConfigManager.MAXIMUM_BEAM_CHARGE.get());
 	}
 
 	public BeamCannonBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {

@@ -37,6 +37,7 @@
   "output": {
     "item": "embers:explosion_charm"
   },
+  "reagents": [],
   "tablet": {
     "item": "embers:ember_crystal_cluster"
   }

@@ -28,6 +28,7 @@
   "output": {
     "item": "embers:inflictor_gem"
   },
+  "reagents": [],
   "tablet": {
     "tag": "forge:gems/diamond"
   }

@@ -53,6 +53,8 @@ public class ConfigManager {
 	public static ConfigValue<Integer> ASHEN_BOOTS_SLOTS;
 	public static ConfigValue<List<? extends String>> SCALE_DAMAGE_PASSES;
 	public static ConfigValue<List<? extends String>> SCALE_DAMAGE_RATES;
+	public static ConfigValue<Integer> MINIMUM_BEAM_CHARGE;
+	public static ConfigValue<Integer> MAXIMUM_BEAM_CHARGE;
 
 	public static ConfigValue<Boolean> CODEX_PROGRESSION;
 	public static ConfigValue<Boolean> PVP_EVERYBODY_IS_ENEMY;
@@ -179,6 +181,9 @@ public class ConfigManager {
 		itemPreferences.add(0, "minecraft:oak_planks");
 		itemPreferences.add(1, "minecraft:cobblestone");
 		ITEM_PREFERENCES = COMMON.comment("Which items are preferred as the result of breaking down a tool on an anvil.").defineList("itemPreferences", itemPreferences, a -> true);
+
+		MINIMUM_BEAM_CHARGE = COMMON.comment("The minimum amount of ember for the beam cannon to fire a shot.").define("minimumBeamCharge", 1000);
+		MAXIMUM_BEAM_CHARGE = COMMON.comment("The maximum amount of ember the beam cannon can store").define("maximumBeamCapacity", 2000);
 
 		COMMON.pop();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON.build());

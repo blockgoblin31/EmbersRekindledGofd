@@ -22,6 +22,7 @@
   "output": {
     "item": "embers:codebreaking_slate"
   },
+  "reagents": [],
   "tablet": {
     "item": "embers:ember_grit"
   }

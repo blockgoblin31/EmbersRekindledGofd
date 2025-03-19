@@ -22,6 +22,7 @@
   "output": {
     "item": "embers:catalytic_plug"
   },
+  "reagents": [],
   "tablet": {
     "tag": "forge:ingots/silver"
   }

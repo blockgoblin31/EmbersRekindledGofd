@@ -28,6 +28,7 @@
   "output": {
     "item": "embers:eldritch_insignia"
   },
+  "reagents": [],
   "tablet": {
     "item": "embers:archaic_circuit"
   }

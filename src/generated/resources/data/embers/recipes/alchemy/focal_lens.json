@@ -28,6 +28,7 @@
   "output": {
     "item": "embers:focal_lens"
   },
+  "reagents": [],
   "tablet": {
     "item": "embers:ember_crystal"
   }

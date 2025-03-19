@@ -26,6 +26,7 @@
     "count": 4,
     "item": "minecraft:soul_sand"
   },
+  "reagents": [],
   "tablet": {
     "item": "embers:ash"
   }

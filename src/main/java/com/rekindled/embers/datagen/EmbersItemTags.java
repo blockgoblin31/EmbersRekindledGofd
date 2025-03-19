@@ -58,6 +58,8 @@ public class EmbersItemTags extends ItemTagsProvider {
 	public static final TagKey<Item> SILVER_ASPECTUS = ItemTags.create(new ResourceLocation(Embers.MODID, "aspectus/silver"));
 	public static final TagKey<Item> DAWNSTONE_ASPECTUS = ItemTags.create(new ResourceLocation(Embers.MODID, "aspectus/dawnstone"));
 
+	public static final TagKey<Item> REAGENTS = ItemTags.create(new ResourceLocation(Embers.TWEAKS_MODID, "reagents"));
+
 	public static final TagKey<Item> ASHEN_STONE = ItemTags.create(new ResourceLocation(Embers.MODID, "ashen_stone"));
 
 	public static final TagKey<Item> PLATES = ItemTags.create(new ResourceLocation("forge", "plates"));
@@ -170,6 +172,8 @@ public class EmbersItemTags extends ItemTagsProvider {
 		tag(LEAD_ASPECTUS).add(RegistryManager.LEAD_ASPECTUS.get());
 		tag(SILVER_ASPECTUS).add(RegistryManager.SILVER_ASPECTUS.get());
 		tag(DAWNSTONE_ASPECTUS).add(RegistryManager.DAWNSTONE_ASPECTUS.get());
+
+		tag(REAGENTS).add(RegistryManager.ASH.get());
 
 		tag(ASHEN_STONE).add(RegistryManager.ASHEN_STONE_ITEM.get(), RegistryManager.ASHEN_BRICK_ITEM.get(), RegistryManager.ASHEN_TILE_ITEM.get());
 
