@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.rekindled.embers.recipe.IAlchemyRecipe.PedestalContents;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
@@ -36,7 +37,7 @@ public class AlchemyResult {
 
 		CompoundTag reagentValues = new CompoundTag();
 		reagents.forEach((item, amount) -> {
-			reagentValues.put(item.getDefaultInstance().getDisplayName().getString(), IntTag.valueOf(amount));
+			reagentValues.put(BuiltInRegistries.ITEM.getKey(item).toString(), IntTag.valueOf(amount));
 		});
 		nbt.put("reagents", reagentValues);
 

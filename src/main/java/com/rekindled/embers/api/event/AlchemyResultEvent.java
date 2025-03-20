@@ -18,14 +18,14 @@ public class AlchemyResultEvent extends UpgradeEvent {
 		this.setRecipe(recipe);
 		this.result = result;
 		this.consumeAmount = consumeAmount;
-		this.isFailure = result.blackPins != recipe.getInputs().size();
+		this.isFailure = result.blackPins != recipe.getInputs().size() || result.reagents.values().stream().anyMatch((i) -> i != 0);
 	}
 
 	public int getConsumeAmount() {
 		return consumeAmount;
 	}
 
-	public void setconsumeAmount(int consumeAmount) {
+	public void setConsumeAmount(int consumeAmount) {
 		this.consumeAmount = consumeAmount;
 	}
 

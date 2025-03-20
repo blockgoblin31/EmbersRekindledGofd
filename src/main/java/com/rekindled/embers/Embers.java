@@ -186,6 +186,7 @@ public class Embers {
 
 		RegistryManager.NEW_BLOCKS.register(modEventBus);
 		RegistryManager.NEW_BLOCK_ENTITY_TYPES.register(modEventBus);
+		RegistryManager.NEW_ITEMS.register(modEventBus);
 
 		ConfigManager.register();
 

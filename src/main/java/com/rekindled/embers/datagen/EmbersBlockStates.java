@@ -488,6 +488,7 @@ public class EmbersBlockStates extends BlockStateProvider {
 		});
 
 		blockWithItem(RegistryManager.ALCHEMY_TABLET, "alchemy_tablet");
+		blockWithItem(RegistryManager.ALCHEMY_REAGENT_PEDESTAL, "alchemy_pedestal_top");
 
 		ExistingModelFile cannonModel = models().getExistingFile(new ResourceLocation(Embers.MODID, "beam_cannon"));
 		simpleBlockItem(RegistryManager.BEAM_CANNON.get(), cannonModel);

@@ -160,7 +160,6 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.WallBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
@@ -207,6 +206,7 @@ public class RegistryManager {
 
 	public static final DeferredRegister<Block> NEW_BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Embers.TWEAKS_MODID);
 	public static final DeferredRegister<BlockEntityType<?>> NEW_BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Embers.TWEAKS_MODID);
+	public static final DeferredRegister<Item> NEW_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Embers.TWEAKS_MODID);
 
     public static Map<ResourceLocation, IAugment> augmentRegistry = new HashMap<ResourceLocation, IAugment>();
 
@@ -464,6 +464,7 @@ public class RegistryManager {
 	public static final RegistryObject<Item> ITEM_TRANSFER_ITEM = ITEMS.register("item_transfer", () -> new BlockItem(ITEM_TRANSFER.get(), new Item.Properties()));
 	public static final RegistryObject<Item> FLUID_TRANSFER_ITEM = ITEMS.register("fluid_transfer", () -> new BlockItem(FLUID_TRANSFER.get(), new Item.Properties()));
 	public static final RegistryObject<Item> ALCHEMY_PEDESTAL_ITEM = ITEMS.register("alchemy_pedestal", () -> new BlockItem(ALCHEMY_PEDESTAL.get(), new Item.Properties()));
+	public static final RegistryObject<Item> ALCHEMY_REAGENT_PEDESTAL_ITEM = NEW_ITEMS.register("reagent_pedestal", () -> new BlockItem(ALCHEMY_REAGENT_PEDESTAL.get(), new Item.Properties()));
 	public static final RegistryObject<Item> ALCHEMY_TABLET_ITEM = ITEMS.register("alchemy_tablet", () -> new BlockItem(ALCHEMY_TABLET.get(), new Item.Properties()));
 	public static final RegistryObject<Item> BEAM_CANNON_ITEM = ITEMS.register("beam_cannon", () -> new BlockItem(BEAM_CANNON.get(), new Item.Properties()));
 	public static final RegistryObject<Item> MECHANICAL_PUMP_ITEM = ITEMS.register("mechanical_pump", () -> new BlockItem(MECHANICAL_PUMP.get(), new Item.Properties()));

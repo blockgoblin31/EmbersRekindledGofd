@@ -2,7 +2,7 @@ package com.rekindled.embers.block;
 
 import com.rekindled.embers.RegistryManager;
 import com.rekindled.embers.blockentity.AlchemyPedestalBlockEntity;
-import com.rekindled.embers.blockentity.AlchemyPedestalTopBlockEntity;
+import com.rekindled.embers.blockentity.AlchemyReagentPedestalBlockEntity;
 import com.rekindled.embers.util.Misc;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -102,6 +101,6 @@ public class AlchemyReagentPedestalBlock extends BaseEntityBlock implements Simp
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide && pState.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER ? createTickerHelper(pBlockEntityType, RegistryManager.ALCHEMY_PEDESTAL_TOP_ENTITY.get(), AlchemyPedestalTopBlockEntity::clientTick) : null;
+        return pLevel.isClientSide ? createTickerHelper(pBlockEntityType, RegistryManager.ALCHEMY_REAGENT_PEDESTAL_BLOCK_ENTITY.get(), AlchemyReagentPedestalBlockEntity::clientTick) : null;
     }
 }

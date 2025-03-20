@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.rekindled.embers.ConfigManager;
-import com.rekindled.embers.block.AlchemyReagentPedestalBlock;
 import org.jetbrains.annotations.NotNull;
 
 import com.rekindled.embers.Embers;
@@ -225,6 +224,10 @@ public class AlchemyTabletBlockEntity extends BlockEntity implements ISparkable,
 							for (int i = 0; i < event.getConsumeAmount(); i++) {
 								pedestals.get(rand.nextInt(pedestals.size())).inventory.setStackInSlot(0, ItemStack.EMPTY);
 							}
+						}
+
+						for (AlchemyReagentPedestalBlockEntity pedestal : reagentPedestals) {
+							pedestal.inventory.setStackInSlot(0, ItemStack.EMPTY);
 						}
 
 						((ServerLevel) level).sendParticles(new GlowParticleOptions(GlowParticleOptions.EMBER_COLOR, 4.0f), pos.getX() + 0.5f, pos.getY() + 0.875, pos.getZ() + 0.5f, 24, 0.1, 0.1, 0.1, 0.5);
